@@ -5,6 +5,7 @@ limit_req_zone $binary_remote_addr zone=mirofish_api:10m rate=60r/m;
 server {
     listen 8080;
     server_name _;
+    server_tokens off;
 
     root /usr/share/nginx/html;
     index index.html;
