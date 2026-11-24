@@ -17,6 +17,16 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
+    api_token = app.config.get("API_AUTH_TOKEN")
+    local_bypass = app.config.get("ALLOW_INSECURE_LOCAL_DEV", False)
+    secret_key = app.config.get("SECRET_KEY")
+    if not local_bypass and (
+        not api_token or len(api_token) < 32 or api_token.startswith("replace_with")
+    ):
+        raise RuntimeError("A strong server-side API_AUTH_TOKEN is required")
+    if not secret_key or len(secret_key) < 32 or secret_key.startswith("replace_with"):
+        raise RuntimeError("A strong SECRET_KEY is required")
+
     if hasattr(app, "json") and hasattr(app.json, "ensure_ascii"):
         app.json.ensure_ascii = False
 
