@@ -1,0 +1,39 @@
+# Nginx is the only published service. It injects the server-side API key;
+# the key is never delivered to the browser.
+limit_req_zone $binary_remote_addr zone=mirofish_api:10m rate=60r/m;
+
+server {
+    listen 8080;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    client_max_body_size 50m;
+    limit_req_status 429;
+
+    location /api/ {
+        limit_req zone=mirofish_api burst=20 nodelay;
+        proxy_pass http://backend:5001;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-MiroFish-API-Key ${API_AUTH_TOKEN};
+        proxy_connect_timeout 10s;
+        proxy_read_timeout 300s;
+    }
+
+    location = /health {
+        proxy_pass http://backend:5001/health;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    add_header X-Frame-Options DENY always;
+}
