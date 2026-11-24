@@ -14,4 +14,4 @@ RUN uv sync --frozen --no-dev \
 COPY backend/ ./
 
 EXPOSE 5001
-CMD ["uv", "run", "--no-sync", "gunicorn", "--workers", "1", "--threads", "8", "--bind", "0.0.0.0:5001", "app:create_app()"]
+CMD ["uv", "run", "--no-sync", "gunicorn", "--workers", "1", "--threads", "8", "--timeout", "360", "--bind", "0.0.0.0:5001", "app:create_app()"]
