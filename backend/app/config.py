@@ -20,6 +20,7 @@ class Config:
     API_AUTH_TOKEN = os.environ.get("API_AUTH_TOKEN")
     ALLOW_INSECURE_LOCAL_DEV = os.environ.get("ALLOW_INSECURE_LOCAL_DEV", "false").lower() == "true"
     CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "")
+    TRUST_PROXY_HEADERS = os.environ.get("TRUST_PROXY_HEADERS", "false").lower() == "true"
     API_RATE_LIMIT_PER_MINUTE = int(os.environ.get("API_RATE_LIMIT_PER_MINUTE", "60"))
     API_EXPENSIVE_RATE_LIMIT_PER_MINUTE = int(os.environ.get("API_EXPENSIVE_RATE_LIMIT_PER_MINUTE", "5"))
     API_EXPENSIVE_PATH_PREFIXES = (
