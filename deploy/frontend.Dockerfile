@@ -6,7 +6,7 @@ RUN npm ci --prefix frontend
 
 COPY frontend/ ./frontend/
 COPY locales/ ./locales/
-ENV VITE_API_BASE_URL=/api
+ENV VITE_API_BASE_URL=
 RUN npm run build --prefix frontend
 
 FROM nginx:1.27-alpine
