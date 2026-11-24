@@ -32,7 +32,7 @@ def test_ontology_api_returns_safe_truncation_error_and_failed_project(
     monkeypatch.setattr(graph_api, "OntologyGenerator", FailingGenerator)
 
     app = create_app()
-    app.config.update(TESTING=True)
+    app.config.update(TESTING=True, ALLOW_INSECURE_LOCAL_DEV=True, API_AUTH_TOKEN=None)
     response = _post_ontology(app.test_client())
 
     assert response.status_code == 502
