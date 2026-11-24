@@ -9,6 +9,7 @@ services:
       FLASK_DEBUG: "false"
       ALLOW_INSECURE_LOCAL_DEV: "false"
       CORS_ALLOWED_ORIGINS: ""
+      TRUST_PROXY_HEADERS: "true"
     expose:
       - "5001"
     restart: unless-stopped
