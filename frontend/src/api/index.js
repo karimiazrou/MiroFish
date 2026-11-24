@@ -5,7 +5,7 @@ import i18n from '../i18n'
 // to the private backend in the container deployment. No API secret is sent
 // to or embedded in the browser bundle.
 const service = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '',
   timeout: 300000,
   headers: {
     'Content-Type': 'application/json'
