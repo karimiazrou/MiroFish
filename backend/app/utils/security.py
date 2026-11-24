@@ -76,7 +76,12 @@ def register_security(app) -> None:
             and not app.config.get("DEBUG", False)
             and _is_loopback(request.remote_addr)
         )
-        if not expected:
+        configured = bool(
+            expected
+            and len(str(expected)) >= 32
+            and not str(expected).startswith("replace_with")
+        )
+        if not configured:
             if not local_dev:
                 return jsonify({"success": False, "error": "API authentication is not configured"}), 503
         elif not (supplied and hmac.compare_digest(str(expected), supplied)):
