@@ -80,3 +80,11 @@ def test_expensive_operations_have_separate_limit():
     headers = {"X-MiroFish-API-Key": "test-token-that-is-long-enough"}
     assert client.post("/api/simulation/start", headers=headers, environ_overrides={"REMOTE_ADDR": "192.0.2.12"}).status_code == 200
     assert client.post("/api/simulation/start", headers=headers, environ_overrides={"REMOTE_ADDR": "192.0.2.12"}).status_code == 429
+
+
+def test_local_bypass_is_limited_to_loopback():
+    client = _app(API_AUTH_TOKEN=None, ALLOW_INSECURE_LOCAL_DEV=True).test_client()
+    local = client.get("/api/ping", environ_overrides={"REMOTE_ADDR": "127.0.0.1"})
+    remote = client.get("/api/ping", environ_overrides={"REMOTE_ADDR": "198.51.100.25"})
+    assert local.status_code == 200
+    assert remote.status_code == 503
