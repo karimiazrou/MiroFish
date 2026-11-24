@@ -67,8 +67,10 @@ class Config:
             errors.append("ZEP_API_KEY not configured")
         if not cls.API_AUTH_TOKEN and not cls.ALLOW_INSECURE_LOCAL_DEV:
             errors.append("API_AUTH_TOKEN must be configured (or explicitly enable local-only development bypass)")
-        if not cls.SECRET_KEY or len(cls.SECRET_KEY) < 32:
-            errors.append("SECRET_KEY must be set to a random value of at least 32 characters")
+        if cls.API_AUTH_TOKEN and (len(cls.API_AUTH_TOKEN) < 32 or cls.API_AUTH_TOKEN.startswith("replace_with")):
+            errors.append("API_AUTH_TOKEN must be a real random value of at least 32 characters")
+        if not cls.SECRET_KEY or len(cls.SECRET_KEY) < 32 or cls.SECRET_KEY.startswith("replace_with"):
+            errors.append("SECRET_KEY must be a real random value of at least 32 characters")
         if os.environ.get("ZEP_API_URL"):
             errors.append("ZEP_API_URL is unsupported; MiroFish connects to Zep Cloud only")
         if cls.DEBUG:
